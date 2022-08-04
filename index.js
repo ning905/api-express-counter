@@ -8,78 +8,78 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
-let counter = 0;
-const additionalCounter = {};
+// let counter = 0;
+const counters = { counter: 0 };
 
 app.get("/counter", (req, res) => {
-  res.json({ counter });
+  res.json({ counter: counters.counter });
 });
 
 app.delete("/counter", (req, res) => {
-  counter = 0;
+  counters.counter = 0;
 
-  res.json({ counter });
+  res.json({ counter: counters.counter });
 });
 
 app.post("/counter/increment", (req, res) => {
-  counter++;
+  counters.counter = counters.counter + 1;
 
-  res.status(201).json({ counter });
+  res.status(201).json({ counter: counters.counter });
 });
 
 app.post("/counter/decrement", (req, res) => {
-  counter--;
+  counters.counter = counters.counter - 1;
 
-  res.status(201).json({ counter });
+  res.status(201).json({ counter: counters.counter });
 });
 
 app.post("/counter/double", (req, res) => {
-  counter *= 2;
+  counters.counter = counters.counter * 2;
 
-  res.status(201).json({ counter });
+  res.status(201).json({ counter: counters.counter });
 });
 
 // Extension 1
 app.put("/counter", (req, res) => {
   if (req.query.value) {
-    counter = Number(req.query.value);
+    counters.counter = Number(req.query.value);
   }
-  res.status(201).json({ counter });
+  res.status(201).json({ counter: counters.counter });
 });
 
 //Extension 2
 app.get("/counter/:name", (req, res) => {
   console.log(req.params.name);
 
-  if (!additionalCounter.hasOwnProperty(req.params.name)) {
-    additionalCounter[req.params.name] = 0;
+  if (!counters.hasOwnProperty(req.params.name)) {
+    counters[req.params.name] = 0;
   }
 
-  res.json({ counter: additionalCounter[req.params.name] });
+  res.json({ counter: counters[req.params.name] });
 });
 
 app.delete("/counter/:name", (req, res) => {
-  additionalCounter[req.params.name] = 0;
+  counters[req.params.name] = 0;
 
-  res.json({ counter: additionalCounter[req.params.name] });
+  res.json({ counter: counters[req.params.name] });
 });
 
 app.post("/counter/:name/increment", (req, res) => {
-  additionalCounter[req.params.name] = additionalCounter[req.params.name] + 1;
+  counters[req.params.name] = counters[req.params.name] + 1;
 
-  res.status(201).json({ counter: additionalCounter[req.params.name] });
+  res.status(201).json({ counter: counters[req.params.name] });
 });
 
 app.post("/counter/:name/decrement", (req, res) => {
-  additionalCounter[req.params.name] = additionalCounter[req.params.name] - 1;
+  counters[req.params.name] = counters[req.params.name] - 1;
 
-  res.status(201).json({ counter: additionalCounter[req.params.name] });
+  res.status(201).json({ counter: counters[req.params.name] });
 });
 
 app.post("/counter/:name/double", (req, res) => {
-  additionalCounter[req.params.name] = additionalCounter[req.params.name] * 2;
+  counters[req.params.name] = counters[req.params.name] * 2;
 
-  res.status(201).json({ counter: additionalCounter[req.params.name] });
+  res.status(201).json({ counter: counters[req.params.name] });
 });
 
 const port = 3030;
